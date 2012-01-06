@@ -3,8 +3,6 @@
 
 #include "gem.h"
 
-// PyObject* pygem_getEdge(gemptr brep, int edge)
-//  returns ((tlimit[0],tlimit[1]), (nodes[0],nodes[1]), (faces[0],faces[1]), nattr)
 int
 gem_getEdge(/*@unused@*/
             gemBRep *brep,              /* (in)  BRep pointer */
