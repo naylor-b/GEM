@@ -1,6 +1,7 @@
 
 // you must include Python.h before ANY other header files!
 #include <Python.h>
+#include <structmember.h>  // need this for PyMemberDef
 
 // use the following if extension is composed of multiple files
 //#define PY_ARRAY_UNIQUE_SYMBOL xx_numpy_xx
@@ -10,7 +11,7 @@
 
 typedef struct {
     PyObject_HEAD
-    gemID id;
+    gemID gid;
 } gemObject;
 
 
@@ -25,8 +26,8 @@ gemObject_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     gemObject* self = (gemObject*)type->tp_alloc(type, 0);
     if(self != NULL) {
-        self->id.index = 0;
-        self->id.ident.tag = 0;
+        self->gid.index = 0;
+        self->gid.ident.tag = 0;
     }
     return (PyObject*) self;
 }
@@ -42,12 +43,12 @@ gemObject_init(gemObject *self, PyObject *args, PyObject *kwds)
 
 
 /* Here's how you add attributes to your type... */
-//static PyMemberDef gemObject_members[] = {
-    //{"index", T_INT, offsetof(gemObject, id.index), 0, "gem id index"},
-    //{"tag", T_INT, offsetof(gemObject, id.ident.tag), 0, "gem tag"},
-    //{"ptr", T_INT, offsetof(gemObject, id.ptr), 0, "gem entity ptr"},
-//    {NULL}  /* Sentinel */
-//};
+static PyMemberDef gemObject_members[] = {
+    {"index", T_INT, offsetof(gemObject, gid.index), READONLY, "gem id index"},
+    {"tag", T_INT, offsetof(gemObject, gid.ident.tag), READONLY, "gem tag"},
+    {"ptr", T_OBJECT, offsetof(gemObject, gid.ident.ptr), READONLY, "gem entity ptr"},
+    {NULL}  /* Sentinel */
+};
 
 
 // here's how you add functions to your type
@@ -59,8 +60,6 @@ gemObject_init(gemObject *self, PyObject *args, PyObject *kwds)
 //    METH_O:         expects (PyObject* self_or_module, PyObject *some_object)
 //
 static PyMethodDef gemObject_methods[] = {
-    //{"funct",  (PyCFunction)gemObject_funct, METH_KEYWORDS,
-    // "just a test function too see how this works"},
     {NULL, NULL, 0, NULL}        // Sentinel
 };
 
@@ -95,7 +94,7 @@ static PyTypeObject gemObjectType = {
     0,                         /* tp_iter */
     0,                         /* tp_iternext */
     gemObject_methods,         /* tp_methods */
-    0,//gemObject_members,         /* tp_members */
+    gemObject_members,         /* tp_members */
     0,                         /* tp_getset */
     0,                         /* tp_base */
     0,                         /* tp_dict */
@@ -115,12 +114,6 @@ static PyTypeObject gemObjectType = {
     0                          /* tp_del */
 };
 
-static PyMethodDef pygem_methods[] = {
-    //{"funct",  (PyCFunction)gemObject_funct, METH_KEYWORDS,
-    // "just a test function too see how this works"},
-    {NULL, NULL, 0, NULL}        // Sentinel
-};
-
 static PyObject* pygem_getEdge(PyObject* module, PyObject* args) {
     gemObject* pybrep;
     int edge;
@@ -130,13 +123,14 @@ static PyObject* pygem_getEdge(PyObject* module, PyObject* args) {
         return NULL;
     }
     
-    // call actual gem function
-    gemBRep* brep = &(pybrep->id);
+    // FIXME: need to determine if ptr is actually a gemBRep
+    gemBRep* brep = pybrep->gid.ident.ptr;
     double tlimit[2];
     int nodes[2];
     int faces[2];
     int num_attrs;
     
+    // call actual gem function
     if (gem_getEdge(brep, edge, tlimit, nodes, faces, &num_attrs) != GEM_SUCCESS) {
         PyErr_SetString(PyExc_RuntimeError, "getEdge call failed");
         return NULL;
@@ -150,11 +144,18 @@ static PyObject* pygem_getEdge(PyObject* module, PyObject* args) {
 }
 
 
-#ifndef PyMODINIT_FUNC	/* declarations for DLL import/export */
+static PyMethodDef pygem_methods[] = {
+    {"get_edge",  (PyCFunction)pygem_getEdge, METH_VARARGS,
+     "for a given edge in a BRep, return nodes, faces, and number of attributes"},
+    {NULL, NULL, 0, NULL}        // Sentinel
+};
+
+
+#ifndef PyMODINIT_FUNC /* declarations for DLL import/export */
 #define PyMODINIT_FUNC void
 #endif
 PyMODINIT_FUNC
-initpygem(void) 
+initgem(void) 
 {
     PyObject* module;
 
@@ -162,13 +163,13 @@ initpygem(void)
     if (PyType_Ready(&gemObjectType) < 0)
         return;
 
-    module = Py_InitModule3("pygem", pygem_methods,
+    module = Py_InitModule3("gem", pygem_methods,
                             "Module to interface with NPSS");
 
     import_array(); // loads the numpy C API
 
     Py_INCREF(&gemObjectType);
-    PyModule_AddObject(module, "session", (PyObject *)&gemObjectType);
+    PyModule_AddObject(module, "GEMid", (PyObject *)&gemObjectType);
 }
 
 
