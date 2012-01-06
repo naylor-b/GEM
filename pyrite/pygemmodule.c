@@ -114,6 +114,11 @@ static PyTypeObject gemObjectType = {
     0                          /* tp_del */
 };
 
+// since I don't have the full gem api here, I'll add a function temporarily to generate
+// a dummy BRep for me that I can use for testing
+static PyObject* pygem_dummy_brep(PyObject* module, PyObject* args) {
+}
+
 static PyObject* pygem_getEdge(PyObject* module, PyObject* args) {
     gemObject* pybrep;
     int edge;
@@ -147,6 +152,8 @@ static PyObject* pygem_getEdge(PyObject* module, PyObject* args) {
 static PyMethodDef pygem_methods[] = {
     {"get_edge",  (PyCFunction)pygem_getEdge, METH_VARARGS,
      "for a given edge in a BRep, return nodes, faces, and number of attributes"},
+    {"dummy_brep",  (PyCFunction)pygem_dummy_brep, METH_VARARGS,
+     "return a dummy brep for testing"},
     {NULL, NULL, 0, NULL}        // Sentinel
 };
 
