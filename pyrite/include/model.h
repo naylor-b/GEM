@@ -1,7 +1,3 @@
-nclude
- *
- *
- */
 
 
 /* Spline Point Types -- can be or'ed  */

@@ -62,34 +62,34 @@
 
 /* Parameter/Attribute Types */
 
-#define GEM_BOOL		0
-#define GEM_INTEGER		1
-#define GEM_REAL		2
-#define GEM_STRING		3
-#define GEM_SPLINE 		4
+#define GEM_BOOL        0
+#define GEM_INTEGER     1
+#define GEM_REAL        2
+#define GEM_STRING      3
+#define GEM_SPLINE      4
 
 
 /* Solid Boolean Operators */
 
-#define GEM_SUBTRACT	1
-#define GEM_INTERSECT	2
-#define GEM_UNION	3
+#define GEM_SUBTRACT    1
+#define GEM_INTERSECT   2
+#define GEM_UNION       3
 
 
 
   typedef struct {
-    int  index;                 /* internal index of entity -- or -- */
+    int  index;         /* internal index of entity -- or -- */
     union {
-      void *ptr;		/* internal pointer to entity */
-      int  tag;                 /* another integer */
+      void *ptr;        /* internal pointer to entity */
+      int  tag;         /* another integer */
     } ident;
   } gemID;
 
 
   typedef struct {
-    char   *name;		/* Attribute Name */
-    int    length;		/* number of values */
-    int    type;		/* attribute type - one of: */
+    char   *name;       /* Attribute Name */
+    int    length;      /* number of values */
+    int    type;        /* attribute type - one of: */
     int    *integers;
     double *reals;
     char   *string;
@@ -97,16 +97,15 @@
 
 
   typedef struct {
-    int     nattrs;		/* number of attributes */
-    int     mattrs;             /* number of allocated attributes */
-    gemAttr *attrs;		/* the attributes */
+    int     nattrs;        /* number of attributes */
+    int     mattrs;        /* number of allocated attributes */
+    gemAttr *attrs;        /* the attributes */
   } gemAttrs;
 
 
 #include "brep.h"
 #include "model.h"
 #include "drep.h"
-
 
   typedef struct {
     int      magic;             /* magic number to check for authenticity */
@@ -167,13 +166,13 @@ gem_loadModel(gemCntxt *cntxt,          /* (in)  context */
  */
 extern int
 gem_retContextAttr(gemCntxt *cntxt,     /* (in)  context */
-                   char    name[],	/* (in)  pointer to attribute name */
-                   int     *atype,	/* (out) Atrribute type */
-                   int     *alen,	/* (out) Attribute length */
+                   char    name[],      /* (in)  pointer to attribute name */
+                   int     *atype,      /* (out) Atrribute type */
+                   int     *alen,       /* (out) Attribute length */
                                         /*       one of: */
-                   int     *integers[],	/* (out) pointer to integers/bools */
-                   double  *reals[],	/* (out) pointer to doubles */
-                   char    *string[]);	/* (out) pointer to string */
+                   int     *integers[], /* (out) pointer to integers/bools */
+                   double  *reals[],    /* (out) pointer to doubles */
+                   char    *string[]);  /* (out) pointer to string */
 
 
 /* set a Context attribute
@@ -187,16 +186,16 @@ gem_retContextAttr(gemCntxt *cntxt,     /* (in)  context */
  */
 extern int
 gem_setContextAttr(gemCntxt *cntxt,     /* (in)  context */
-                   char    name[],	/* (in)  pointer to attribute name */
-                   int     atype,	/* (in)  Atrribute type */
-                   int     alen,	/* (in)  Attribute length */
+                   char    name[],      /* (in)  pointer to attribute name */
+                   int     atype,       /* (in)  Atrribute type */
+                   int     alen,        /* (in)  Attribute length */
                                         /*       provide the appropriate one: */
                    /*@null@*/
-                   int     integers[],	/* (in)  integers/bools */
+                   int     integers[],  /* (in)  integers/bools */
                    /*@null@*/
-                   double  reals[],	/* (in)  doubles */
+                   double  reals[],     /* (in)  doubles */
                    /*@null@*/
-                   char    string[]);	/* (in)  string */
+                   char    string[]);   /* (in)  string */
 
 
 /* get BRep owner info

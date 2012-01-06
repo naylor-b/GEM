@@ -14,80 +14,80 @@
 
 
   typedef struct {
-    gemID    handle;		/* internal entity */
-    double   xyz[3];		/* coordinates for point */
-    gemAttrs *attr;		/* attribute structure */
+    gemID    handle;       /* internal entity */
+    double   xyz[3];       /* coordinates for point */
+    gemAttrs *attr;        /* attribute structure */
   } gemNode;
 
 
   typedef struct {
-    gemID    handle;		/* internal entity */
-    double   tlimit[2];		/* t range */
-    int      nodes[2];		/* bounding nodes */
-    int      faces[2];		/* bounding faces (0 neg, 1 pos sense) */
-    gemAttrs *attr;		/* attribute structure */
+    gemID    handle;        /* internal entity */
+    double   tlimit[2];     /* t range */
+    int      nodes[2];      /* bounding nodes */
+    int      faces[2];      /* bounding faces (0 neg, 1 pos sense) */
+    gemAttrs *attr;         /* attribute structure */
   } gemEdge;
 
 
   typedef struct {
-    gemID    handle;		/* internal entity */
-    int      type;              /* 0 outer, 1 inner */
-    int      face;              /* owning face */
-    int      nedges;		/* number of edges in loop */
-    int      *edges;		/* list of edges (- is opposite sense) */
-    gemAttrs *attr;		/* attribute structure */
+    gemID    handle;       /* internal entity */
+    int      type;         /* 0 outer, 1 inner */
+    int      face;         /* owning face */
+    int      nedges;       /* number of edges in loop */
+    int      *edges;       /* list of edges (- is opposite sense) */
+    gemAttrs *attr;        /* attribute structure */
   } gemLoop;
   
 
   typedef struct {
-    gemID    handle;		/* internal entity */
-    double   uvbox[4];		/* u&v ranges */
-    int      norm;		/* flip normal flag (-1 or 1) */
-    int      nloops;		/* number of closed loops */
-    int      *loops;		/* the loops indices */
-    char     *ID;		/* persistent ID */
-    gemAttrs *attr;		/* attribute structure */
+    gemID    handle;     /* internal entity */
+    double   uvbox[4];   /* u&v ranges */
+    int      norm;       /* flip normal flag (-1 or 1) */
+    int      nloops;     /* number of closed loops */
+    int      *loops;     /* the loops indices */
+    char     *ID;        /* persistent ID */
+    gemAttrs *attr;      /* attribute structure */
   } gemFace;
   
   
   typedef struct {
-    gemID    handle;		/* internal entity */
-    int      type;              /* 0 outer, 1 inner */
-    int      nfaces;		/* number of faces touched */
-    int      *faces;		/* face indices */
-    gemAttrs *attr;		/* attribute structure */
+    gemID    handle;       /* internal entity */
+    int      type;         /* 0 outer, 1 inner */
+    int      nfaces;       /* number of faces touched */
+    int      *faces;       /* face indices */
+    gemAttrs *attr;        /* attribute structure */
   } gemShell;
 
 
   typedef struct {
-    gemID    handle;		/* internal entity */
-    int      type;		/* 0-solid-body, 1-sheet-body, 2-wire-body */
-    double   box[6];            /* min and max XYZ to define a box */
-    int      nnode;		/* number of associated nodes */
-    gemNode  *nodes;		/* associated nodes */
-    int      nedge;		/* number of associated edges */
-    gemEdge  *edges;		/* associated edges */
-    int      nloop;             /* number of loops loops */
-    gemLoop  *loops;            /* the accociated loops */
-    int      nface;		/* number of associated faces */
-    gemFace  *faces;		/* associated faces */
-    int      nshell;		/* number of associated shells */
-    gemShell *shells;		/* associated shells */
-    gemAttrs *attr;             /* attribute structure */
+    gemID    handle;      /* internal entity */
+    int      type;        /* 0-solid-body, 1-sheet-body, 2-wire-body */
+    double   box[6];      /* min and max XYZ to define a box */
+    int      nnode;       /* number of associated nodes */
+    gemNode  *nodes;      /* associated nodes */
+    int      nedge;       /* number of associated edges */
+    gemEdge  *edges;      /* associated edges */
+    int      nloop;       /* number of loops loops */
+    gemLoop  *loops;      /* the accociated loops */
+    int      nface;       /* number of associated faces */
+    gemFace  *faces;      /* associated faces */
+    int      nshell;      /* number of associated shells */
+    gemShell *shells;     /* associated shells */
+    gemAttrs *attr;       /* attribute structure */
   } gemBody;
 
 
   typedef struct {
-    int      magic;             /* magic number to check for authenticity */
+    int      magic;            /* magic number to check for authenticity */
     /*@shared@*/
-    void     *omodel;           /* owning model - gemModel not yet defined */
+    void     *omodel;          /* owning model - gemModel not yet defined */
     /*@shared@*/
-    void     *pmodel;           /* parent model - NULL owner is parent */
-    int      ibranch;           /* instance branch (if any) */
-    int      inumber;           /* instance number (0 is body owner) */
-    double   xform[12];		/* transformation matrix */
-    double    invXform[12];	/* inverse transformation matrix */
-    gemBody  *body;             /* body pointer */
+    void     *pmodel;          /* parent model - NULL owner is parent */
+    int      ibranch;          /* instance branch (if any) */
+    int      inumber;          /* instance number (0 is body owner) */
+    double   xform[12];        /* transformation matrix */
+    double    invXform[12];    /* inverse transformation matrix */
+    gemBody  *body;            /* body pointer */
   } gemBRep;
   
 
@@ -133,14 +133,14 @@ gem_getShell(gemBRep *brep,             /* (in)  BRep pointer */
  * point either in or out. Not valid for Wire Bodies.
  */
 extern int
-gem_getFace(gemBRep *brep,              /* (in)  BRep pointer */
-            int     face,               /* (in)  face index */
-            char    *ID[],              /* (out) pointer to persistent ID */
-            double  uvbox[],            /* (out) uv bounding box (4) */
-            int     *norm,		/* (out) flip normal flag (-1 or 1) */
-            int     *nloops,		/* (out) number of loops */
-            int     *loops[],           /* (out) loop indices */
-            int     *nattr);            /* (out) number of attributes */
+gem_getFace(gemBRep *brep,        /* (in)  BRep pointer */
+            int     face,         /* (in)  face index */
+            char    *ID[],        /* (out) pointer to persistent ID */
+            double  uvbox[],      /* (out) uv bounding box (4) */
+            int     *norm,        /* (out) flip normal flag (-1 or 1) */
+            int     *nloops,      /* (out) number of loops */
+            int     *loops[],     /* (out) loop indices */
+            int     *nattr);      /* (out) number of attributes */
 
 
 /* get data about a wire-body
@@ -150,9 +150,9 @@ gem_getFace(gemBRep *brep,              /* (in)  BRep pointer */
  * for Solid and/or Sheet Bodies.
  */
 extern int
-gem_getWire(gemBRep *brep,              /* (in)  BRep pointer */
-            int     *nloops,		/* (out) number of loops */
-            int     *loops[]);          /* (out) loop indices */
+gem_getWire(gemBRep *brep,          /* (in)  BRep pointer */
+            int     *nloops,        /* (out) number of loops */
+            int     *loops[]);      /* (out) loop indices */
 
 
 /* get data about a loop
@@ -164,13 +164,13 @@ gem_getWire(gemBRep *brep,              /* (in)  BRep pointer */
  * Body, face is returned with 0.
  */
 extern int
-gem_getLoop(gemBRep *brep,              /* (in)  BRep pointer */
-            int     loop,               /* (in)  loop index */
-            int     *face,              /* (out) owning face index */
-            int     *type,              /* (out) 0 outer, 1 inner */
-            int     *nedge,		/* (out) number of edges in loop */
-            int     *edges[],		/* (out) pointer to edges/senses */
-            int     *nattr);            /* (out) number of attributes */
+gem_getLoop(gemBRep *brep,         /* (in)  BRep pointer */
+            int     loop,          /* (in)  loop index */
+            int     *face,         /* (out) owning face index */
+            int     *type,         /* (out) 0 outer, 1 inner */
+            int     *nedge,        /* (out) number of edges in loop */
+            int     *edges[],      /* (out) pointer to edges/senses */
+            int     *nattr);       /* (out) number of attributes */
 
 
 /* get data about an edge
@@ -199,10 +199,10 @@ gem_getEdge(gemBRep *brep,              /* (in)  BRep pointer */
  * Returns the data associated with a Node within a BRep.
  */
 extern int
-gem_getNode(gemBRep *brep,		/* (in)  BRep pointer */
-            int     node,		/* (in)  node index */
-            double  xyz[],		/* (out) coordinates (3) */
-            int     *nattr);		/* (out) number of attributes */
+gem_getNode(gemBRep *brep,       /* (in)  BRep pointer */
+            int     node,        /* (in)  node index */
+            double  xyz[],       /* (out) coordinates (3) */
+            int     *nattr);     /* (out) number of attributes */
 
 
 /* get a BRep attribute by index
@@ -212,17 +212,17 @@ gem_getNode(gemBRep *brep,		/* (in)  BRep pointer */
  * of the appropriate type will be filled with a non-NULL value.
  */
 extern int
-gem_getBRepAttr(gemBRep *brep,		/* (in)  BRep pointer */
-                int     etype,		/* (in)  Topological entity type */
-                int     eindex,		/* (in)  Topological entity index */
-                int     aindex,		/* (in)  Attribute index */
-                char    *name[],	/* (out) pointer to attribute name */
-                int     *atype,		/* (out) Atrribute type */
-                int     *alen,		/* (out) Attribute length */
-                                        /*       one of: */
-                int     *integers[],	/* (out) pointer to integers/bools */
-                double  *reals[],	/* (out) pointer to doubles */
-                char    *string[]);	/* (out) pointer to string */
+gem_getBRepAttr(gemBRep *brep,        /* (in)  BRep pointer */
+                int     etype,        /* (in)  Topological entity type */
+                int     eindex,       /* (in)  Topological entity index */
+                int     aindex,       /* (in)  Attribute index */
+                char    *name[],      /* (out) pointer to attribute name */
+                int     *atype,       /* (out) Atrribute type */
+                int     *alen,        /* (out) Attribute length */
+                                      /*       one of: */
+                int     *integers[],  /* (out) pointer to integers/bools */
+                double  *reals[],     /* (out) pointer to doubles */
+                char    *string[]);   /* (out) pointer to string */
 
 
 /* get a BRep attribute by name
@@ -233,17 +233,17 @@ gem_getBRepAttr(gemBRep *brep,		/* (in)  BRep pointer */
  * error indication if the Attribute is not found.
  */
 extern int
-gem_retBRepAttr(gemBRep *brep,		/* (in)  BRep pointer */
-                int     etype,		/* (in)  Topological entity type */
-                int     eindex,		/* (in)  Topological entity index */
-                char    name[],		/* (in)  pointer to attribute name */
-                int     *aindex,	/* (out) Attribute index */
-                int     *atype,		/* (out) Atrribute type */
-                int     *alen,		/* (out) Attribute length */
-                                        /*       one of: */
-                int     *integers[],	/* (out) pointer to integers/bools */
-                double  *reals[],	/* (out) pointer to doubles */
-                char    *string[]);	/* (out) pointer to string */
+gem_retBRepAttr(gemBRep *brep,        /* (in)  BRep pointer */
+                int     etype,        /* (in)  Topological entity type */
+                int     eindex,       /* (in)  Topological entity index */
+                char    name[],       /* (in)  pointer to attribute name */
+                int     *aindex,      /* (out) Attribute index */
+                int     *atype,       /* (out) Atrribute type */
+                int     *alen,        /* (out) Attribute length */
+                                      /*       one of: */
+                int     *integers[],  /* (out) pointer to integers/bools */
+                double  *reals[],     /* (out) pointer to doubles */
+                char    *string[]);   /* (out) pointer to string */
 
 
 /* set a BRep attribute
@@ -256,19 +256,19 @@ gem_retBRepAttr(gemBRep *brep,		/* (in)  BRep pointer */
  * be used.
  */
 extern int
-gem_setBRepAttr(gemBRep *brep,		/* (in)  BRep pointer */
-                int     etype,		/* (in)  Topological entity type */
-                int     eindex,		/* (in)  Topological entity index */
-                char    name[],		/* (in)  pointer to attribute name */
-                int     atype,		/* (in)  Atrribute type */
-                int     alen,		/* (in)  Attribute length */
-                                        /*       provide the appropriate one: */
+gem_setBRepAttr(gemBRep *brep,      /* (in)  BRep pointer */
+                int     etype,      /* (in)  Topological entity type */
+                int     eindex,     /* (in)  Topological entity index */
+                char    name[],     /* (in)  pointer to attribute name */
+                int     atype,      /* (in)  Atrribute type */
+                int     alen,       /* (in)  Attribute length */
+                                    /*       provide the appropriate one: */
                 /*@null@*/
-                int     integers[],	/* (in)  integers/bools */
+                int     integers[], /* (in)  integers/bools */
                 /*@null@*/
-                double  reals[],	/* (in)  doubles */
+                double  reals[],    /* (in)  doubles */
                 /*@null@*/
-                char    string[]);	/* (in)  string */
+                char    string[]);  /* (in)  string */
 
 
 /* get mass properties

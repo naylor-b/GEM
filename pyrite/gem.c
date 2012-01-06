@@ -101,7 +101,7 @@ gem_setBRepAttr(/*@unused@*/
   if (name == NULL) return GEM_NULLNAME;
   if ((atype != GEM_BOOL) && (atype != GEM_INTEGER) && (atype != GEM_REAL) &&
       (atype != GEM_STRING)) return GEM_BADTYPE;
-  if (alen > 0)
+  if (alen > 0) {
     if (atype == GEM_STRING) {
       if (string   == NULL) return GEM_NULLVALUE;
     } else if (atype == GEM_REAL) {
@@ -109,7 +109,7 @@ gem_setBRepAttr(/*@unused@*/
     } else {
       if (integers == NULL) return GEM_NULLVALUE;
     }
-
+  }
   return GEM_SUCCESS;
 }
 
@@ -151,133 +151,5 @@ gem_getTessel(/*@unused@*/
   return GEM_SUCCESS;
 }
 
-
-
-
-
-// #################################################
-//     Python stuff
-// #################################################
-
-#include <Python.h>
-#ifdef USE_NUMPY
-// use the following if extension is composed of multiple files
-//#define PY_ARRAY_UNIQUE_SYMBOL xx_numpy_xx
-#include <numpy/arrayobject.h>
-#endif
-
-
-typedef struct {
-    PyObject_HEAD
-    /* Type-specific fields go here. */
-    int id;
-} gemObject;
-
-
-
-static PyObject *
-gem_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    gemObject* self = (gemObject*)type->tp_alloc(type, 0);
-    if(self != NULL) {
-        self->id = -1;
-    }
-    
-    return (PyObject*) self;
-}
-
-
-
-// Here's how you add attributes to your type...
-//static PyMemberDef pyrite_members[] = {
-//    {"id", T_INT, offsetof(npssObject, id), 0,"id number"},
-//    {NULL}  /* Sentinel */
-//};
-
-
-// here's how you add functions to your type
-static PyMethodDef pyrite_methods[] = {
-    {"get",  (PyCFunction)pyrite_get, METH_VARARGS,
-     "get the value of the named variable"},
-    {"set",  (PyCFunction)pyrite_set, METH_VARARGS,
-     "set the value of the named variable"},
-    {NULL, NULL, 0, NULL}        // Sentinel
-};
-
-static PyTypeObject npssObjectType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
-    "pyrite",                  /*tp_name*/
-    sizeof(npssObject),        /*tp_basicsize*/
-    0,                         /*tp_itemsize*/
-    (destructor)pyrite_dealloc, /*tp_dealloc*/
-    0,                         /*tp_print*/
-    0,                         /*tp_getattr*/
-    0,                         /*tp_setattr*/
-    0,                         /*tp_compare*/
-    0,                         /*tp_repr*/
-    0,                         /*tp_as_number*/
-    0,                         /*tp_as_sequence*/
-    0,                         /*tp_as_mapping*/
-    0,                         /*tp_hash */
-    0,                         /*tp_call*/
-    0,                         /*tp_str*/
-    0,                         /*tp_getattro*/
-    0,                         /*tp_setattro*/
-    0,                         /*tp_as_buffer*/
-//    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
-    Py_TPFLAGS_DEFAULT, /*tp_flags*/
-    "NPSS session objects",    /* tp_doc */
-    0,                         /* tp_traverse */
-    0,                         /* tp_clear */
-    0,                         /* tp_richcompare */
-    0,                         /* tp_weaklistoffset */
-    0,                         /* tp_iter */
-    0,                         /* tp_iternext */
-    pyrite_methods,            /* tp_methods */
-    0,//pyrite_members,        /* tp_members */
-    0,                         /* tp_getset */
-    0,                         /* tp_base */
-    0,                         /* tp_dict */
-    0,                         /* tp_descr_get */
-    0,                         /* tp_descr_set */
-    0,                         /* tp_dictoffset */
-    (initproc)pyrite_init,     /* tp_init */
-    0,                         /* tp_alloc */
-    0,                         /* tp_new */
-    0,                         /* tp_free */
-    0,                         /* tp_is_gc */
-    0,                         /* tp_bases */
-    0,                         /* tp_mro - method resolution order */
-    0,                         /* tp_cache */
-    0,                         /* tp_subclasses */
-    0,                         /* tp_weaklist */
-    0                          /* tp_del */
-};
-
-
-
-#ifndef PyMODINIT_FUNC	/* declarations for DLL import/export */
-#define PyMODINIT_FUNC void
-#endif
-PyMODINIT_FUNC
-initpyrite(void) 
-{
-    PyObject* m;
-
-    npssObjectType.tp_new = pyrite_new;
-    if (PyType_Ready(&npssObjectType) < 0)
-        return;
-
-    m = Py_InitModule3("pyrite", pyrite_methods,
-                       "Module to interface with NPSS");
-#ifdef USE_NUMPY
-    import_array();
-#endif
-    Py_INCREF(&npssObjectType);
-    PyModule_AddObject(m, "session", (PyObject *)&npssObjectType);
-
-    atexit(doCleanup);
-}
 
 
