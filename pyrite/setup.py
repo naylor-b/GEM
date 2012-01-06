@@ -45,7 +45,7 @@ module1 = Extension('gem',
                     language = 'c',
                     extra_link_args = [],
                     extra_compile_args = [],
-                    sources = ['pyritemodule.c', 'pyRite.c'])
+                    sources = ['pygemmodule.c', 'gem.c'])
 
 
 setup (name = 'pyrite',
